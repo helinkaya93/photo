@@ -1,0 +1,27 @@
+.add-item-form {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+.form-control input {
+  padding: 0.3rem;
+  background: transparent;
+  border: 2px solid rgb(255, 197, 127);
+  border-radius: 8px;
+  font: inherit;
+  outline: none;
+}
+.form-btn {
+  margin: 1rem;
+  background: transparent;
+  border: none;
+  font: inherit;
+  border: 2px solid rgb(232, 141, 13);
+  border-radius: 4px;
+  border-color: rgb(232, 141, 13);
+  transition: 0.4s;
+}
+.form-btn:hover {
+  color: white;
+  background-color: rgb(214, 109, 24);
+}
