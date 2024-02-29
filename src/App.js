@@ -1,25 +1,32 @@
 import "./App.css";
 import Box from "./component/Box";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { fetchImg } from "./services/fetchImg";
 
 function App() {
-  const [photos, setPhoto] = useState([""]);
-  const [searchQuery, setSearchQuery] = useState();
+  const [cachedPhotos, setCachedPhotos] = useState([""]);
+  const [filteredPhotos, setFilteredPhotos] = useState([""]);
+
   useEffect(() => {
     fetchImg().then((res) => {
-      setPhoto(res);
-      console.log(res);
+      setCachedPhotos(res);
+      setFilteredPhotos(res);
     });
   }, []);
-  const handleInputChange = (event) => {
-    setSearchQuery(event.target.value);
-    const filtered = photos.filter((item) =>
-      item.desc.toLowerCase().startsWith(event.target.value.toLowerCase())
-    );
-    setPhoto(filtered);
-  };
+
+  const handleInputChange = useCallback((event) => {
+    const searchQuery = event.target.value;
+    if (searchQuery?.length === 0) {
+      setFilteredPhotos(cachedPhotos)
+    } else {
+      const pattern = `^${searchQuery}`;
+      const rgx = new RegExp(pattern, "i");
+      const filtered = cachedPhotos.filter((item) => (rgx.test(item.desc)));
+      setFilteredPhotos(filtered);
+    }
+  }, [cachedPhotos]);
+
   return (
     <div className="App">
       <div className="search">
@@ -29,7 +36,6 @@ function App() {
             placeholder="search item"
             id="search"
             onChange={handleInputChange}
-            value={searchQuery}
           />
           <button type="submit" className="title-search">
             search
@@ -37,7 +43,7 @@ function App() {
         </form>
       </div>
       <div className="wrapper-box">
-        {photos.map((item) => {
+        {filteredPhotos.map((item) => {
           return <Box img={item.src} desc={item.desc} key={item.id} />;
         })}
       </div>
@@ -45,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);
