@@ -2,23 +2,23 @@ import "./App.css";
 import Box from "./component/Box";
 
 import { useState, useEffect } from "react";
-import { fetchimg } from "./component/fetchimg";
+import { fetchImg } from "./services/fetchImg";
 
 function App() {
   const [photos, setPhoto] = useState([""]);
   const [searchQuery, setSearchQuery] = useState();
   useEffect(() => {
-    fetchimg().then((res) => {
+    fetchImg().then((res) => {
       setPhoto(res);
       console.log(res);
     });
   }, []);
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
-    const filtred = photos.filter((item) =>
+    const filtered = photos.filter((item) =>
       item.desc.toLowerCase().startsWith(event.target.value.toLowerCase())
     );
-    setPhoto(filtred);
+    setPhoto(filtered);
   };
   return (
     <div className="App">
